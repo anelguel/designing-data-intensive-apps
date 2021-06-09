@@ -21,3 +21,9 @@ Typical expectations of software reliability include:
 * The system prevents any unauthorized access and abuse.
 _In other words, we can understand **reliability** to mean "continuing to work correctly, even when things go wrong."
 
+Reliability issues usually relate to **hardware faults**, **software errors**, and *human errors**.
+
+## Scalability
+**Scalability** is the term we use to describe a system's ability to cope with increased load.
+
+It's important to describe the current load on the system. 

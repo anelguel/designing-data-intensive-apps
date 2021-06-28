@@ -21,9 +21,25 @@ Typical expectations of software reliability include:
 * The system prevents any unauthorized access and abuse.
 _In other words, we can understand **reliability** to mean "continuing to work correctly, even when things go wrong."
 
-Reliability issues usually relate to **hardware faults**, **software errors**, and *human errors**.
+Reliability issues usually relate to **hardware faults**, **software errors**, and **human errors**.
 
 ## Scalability
 **Scalability** is the term we use to describe a system's ability to cope with increased load.
 
-It's important to describe the current load on the system. 
+### Describing Load
+It's important to **describe the current load on the system**. Load can be described with a few numbers which we call *load parameters*. Load parameters can vary but may be requests per second to a web server, the ratio of reads to writes in a database, the number of simultaneously active users in a chat room, the hit rate on a cache, or others.
+
+### Describing Performance
+Once load is described, you can **investigate performance** by seeing what happens when the load increases.
+
+To investigate performance, you may ask yourself two questions:
+* When a load parameter is increased and the system resources remain unchanged, how is the performance of the system affected?
+* When a load parameter is increased, how much do you need to increase the resources if you want to keep performance unchanged?
+
+In online systems, what's usually more important is the service's **response time** - that is, the time between a client sending a request and the receiving response.
+
+**Response time** is what the client sees: besides the actual time to process the request (the service time), it includes network delays and queueing delays.
+
+**Latency** is the duration that a request is waiting to be handled - during which it is *latent*, awaiting a service.
+
+These terms are often used synonymously, but they are not the same.

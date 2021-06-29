@@ -43,3 +43,9 @@ In online systems, what's usually more important is the service's **response tim
 **Latency** is the duration that a request is waiting to be handled - during which it is *latent*, awaiting a service.
 
 These terms are often used synonymously, but they are not the same.
+
+## Maintainability
+Maintanence of software includes fixing bugs, keeping its systems operational, investigating failures, adapting it to new platforms, modifying it for new use cases, repaying technical debt, and adding new features. These are so-called *legacy* systems.
+ 
+We pay special attention to these principles for software systems:
+* **Operability** - Make it easy for operations teams to keep the system running smoothly.

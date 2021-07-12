@@ -49,3 +49,5 @@ Maintanence of software includes fixing bugs, keeping its systems operational, i
  
 We pay special attention to these principles for software systems:
 * **Operability** - Make it easy for operations teams to keep the system running smoothly.
+* **Simplicity** - Make it easy for new engineers to understand the system, by removing as much complexity as possible from the system.
+* **Evolvability** - Make it easy for engineers to make changes to the system in the future, adapting it for unanticipated use cases as requirements change. Also known as *extensibility*, *modifiability*, or *plasticity*.

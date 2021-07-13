@@ -18,3 +18,29 @@ There are several driving forces behind the adoption of *Not Only SQL* databases
 Most application development today is done in object-oriented programming languages, which leads to a common criticism of the SQL data model: if data is stored in relational tables, an awkward translation layer is required between the objects in the application code and the database model of tables, rows, and columns.
 
 **Many-to-One and Many-to-Many Relationships**
+
+Are Document Databases Repeating History?
+The network model
+The relational model
+Comparison to document databases
+
+Relational Versus Document Databses Today
+Which data model leads to simpler application code?
+Schema flexibility in the document model
+Data locality for queries
+Convergence of document and relational databases
+
+Query Languages for Data
+Declarative Queries on the Web
+MapReduce Querying
+
+Graph-Like Data Models
+Property Graphs
+The Cypher Query Language
+Graph Queries in SQL
+Triple-Stores and SPARQL
+The semantic web
+The RDF data model
+The SPARQL query language
+
+The Foundation: Datalog

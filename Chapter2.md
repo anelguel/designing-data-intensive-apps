@@ -19,7 +19,18 @@ Most application development today is done in object-oriented programming langua
 
 **Many-to-One and Many-to-Many Relationships**
 
-Are Document Databases Repeating History?
+There are time when you'll have many-to-one or many-to-many relationships. The book used LinkedIn profiles as an example. Bill Gate's location, "Seattle" and industry,"Philanthropy" can be saved in a database as standarized lists instead of plain-text strings. This is up for the developer to decide. One is never intrinsically better than the other, rather they vary on a case by case basis.
+
+Some pros to having a seperate `location` and `industry_id` table include:
+
+* Consistent style and spelling across profiles
+* Avoiding ambiguity (e.g., if there are several cities with the same name)
+* Ease of updating - the name is stored in only one place, so it is easy to update across the board if it ever needs to be changed (e.g. change of city name due to political events)
+* Localization support - when the site is translated into other languages, the standardized lists can be localized, so the region and industry can be displayed in the viewer's language
+* Better search - e.g., a search for philanthropists in the state of Washington can match this profile, because the list of regions can encode the fact that Seattle is on Washington (which is not apparent from the string "Greater Seattle Area")
+
+**Are Document Databases Repeating History?**
+
 The network model
 The relational model
 Comparison to document databases

@@ -31,14 +31,34 @@ Some pros to having a seperate `location` and `industry_id` table include:
 
 **Are Document Databases Repeating History?**
 
-The network model
-The relational model
+*The network model*
+
+Also known as the CODASYL (Conference on Data Systems Languages) model, this model initally had a large following, but eventually faded into obscurity. 
+
+It is a gernalization of the hierarchical model. In the tree structure of the hierarchical model, every record has exactly one parent; in the network model, a record could have multiple parents. 
+
+For example, there could be one record for the "Greater Seattle Area" region, and every user who lived in that region could be linked to it.
+
+*The relational model*
+
+The relational model became SQL, and took over the world of data!
+
+What the relational data model did, by contrast to the network model, was to lay out all the data in the open: a relation (table) is simply a collection of tuples (rows), and that's it.
+
+Querying happens automatically by the query optimizer, not by the application developer. Also, you can declare indexes
+
 Comparison to document databases
 
 Relational Versus Document Databses Today
 Which data model leads to simpler application code?
 Schema flexibility in the document model
-Data locality for queries
+
+*Data locality for queries*
+
+If data is split across multiple tables (like the LinkedIn example), muliple index lookups are required to retreive it all, which may require more desk seeks and take more time.
+
+The locality advantage only applies if you need large parts of the document at the same time. The database typically needs to load the entire document, even if you one access a small portion of it, which can be wasteful on large documents.
+
 Convergence of document and relational databases
 
 Query Languages for Data

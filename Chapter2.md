@@ -30,6 +30,7 @@ Some pros to having a seperate `location` and `industry_id` table include:
 * Better search - e.g., a search for philanthropists in the state of Washington can match this profile, because the list of regions can encode the fact that Seattle is on Washington (which is not apparent from the string "Greater Seattle Area")
 
 **Are Document Databases Repeating History?**
+Various solutions were proposed to solve the limitations of the hierarchical model where joins aren't supported.
 
 *The network model*
 
@@ -47,10 +48,24 @@ What the relational data model did, by contrast to the network model, was to lay
 
 Querying happens automatically by the query optimizer, not by the application developer. Also, you can declare indexes
 
-Comparison to document databases
+*Comparison to document databases*
 
-Relational Versus Document Databses Today
-Which data model leads to simpler application code?
+Both relational and document databases refer to have a unique identifer, which is called a foreign key in relational databases and a document reference in document databases.
+
+**Relational Versus Document Databses Today**
+
+The main arguments in favor of the divument data model are schema flexibility, better performabe due to locality and that for some applications it is closer to the data structures used by the application.
+
+The relational model counters by providing better sipport got joins, and many-to-one and many-to-many relationships.
+
+*Which data model leads to simpler application code?*
+
+Document model:
+* Good for data that has document-like structure (i.e. a tree of one-to-many relationships, where typically the entire tree is loaded at once).
+    * Limitations include: 
+        * You cannot refer directly to a nested item within a document but instead you need to say something like, "the second item in the list of positions fo ruser 251"
+        * Poor support for joins. If joins are involved, you pretty much want to go with the relational data model.
+
 Schema flexibility in the document model
 
 *Data locality for queries*

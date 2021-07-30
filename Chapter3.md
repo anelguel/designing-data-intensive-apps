@@ -37,4 +37,14 @@ Lastly, because compaction makes segments much smaller, you can also merge sever
 
 ![](images\chapter3\pg74.jpg)
 
-This approach is sweet, but comes with its limitations, including: file format, deleting records, crash recovery, partially written records, and concurrency control.
+This approach is good, but comes with its limitations, including: file format, deleting records, crash recovery, partially written records, and concurrency control.
+
+## SSTables and LSM-Trees
+
+An SSTable is shown below
+
+![](images\chapter3\pg76.jpg)
+
+Constructing and maintaining SSTables
+Making an LSM-tree out of SSTables
+Performance optimizations

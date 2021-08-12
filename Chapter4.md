@@ -123,3 +123,24 @@ SOAP is an XML-based protocol for making network API requests. Although it is mo
 WSDL enables code generation so that a client can access a remote service using local classes and method calls. WSDL is not designed to be human readable and SOAP messages are often too complex to construct manually, therefore a lot of SOAP users rely heavily on tool support, code generation and IDEs.
 
 RESTful APIs tend to favor simpler approaches, typically involving less code gneration and automated tooling. A definition formar such as OpenAPI, also known as Swagger, can be used to describe RESTful APIs and produce documentation.
+
+
+### The problems with remote procedure calls (RPCs)
+A remote procedure call (RPC) is when a computer program causes a procedure (subroutine) to execute in a different address space (commonly on another computer on a shared network), which is coded as if it were a normal (local) procedure call, without the programmer explicitly coding the details for the remote interaction. That is, the programmer writes essentially the same code whether the subroutine is local to the executing program, or remote (via Wikipedia).
+
+For now, myself (and most of the development world) sticks to REST and also SOAP. Given this, I will not further delve into this section. 
+
+## Message-Passing Dataflow
+
+Asynchronous message-passing systems allow a client request (message) to be delivered to another process with low latency. They are similar to databases in that the message is not sent via a direct network connection, but an intermediary called a *message broker*, also called a message queue or message oriented middleware, which stores the message temporarily.
+
+The message broker advantages compared to RPC include:
+* It can act as a buffer if the recipient is unavailable or overloaded, and thus improve system reliability.
+* It can automatically redeliver messages to a process that has crashed, and this prevent messages from being lost. 
+* It avoids the sender needing to know the IP address and port number of the recipient.
+* It allows one message to be sent to several recipients.
+* It logically decouples the sender from the recipient.
+
+Message-passing communication is usually one-way: a sender normally doesn't expect to receive a reply to its messages. It is possible for a process to send a response, but this would usually be done on a separate channel. This communication patter is asynchronous: the sender doesn't wait for the message to be delievered, but simply sends it and then forgets about it.
+
+Asynchronous message passing (using message brokers or actors), where nodes communicate by sending each other messages that are encoded by the sender and decoded by the recipient.

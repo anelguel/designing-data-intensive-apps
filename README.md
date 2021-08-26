@@ -2,6 +2,7 @@
 # Designing Data-Intensive Applications 
 This is the documentation for Designing Data-Intensive Applications by Martin Kleppmann and is divided by chapter.
 
+![](images\bookcover\bookcover.jpg)
 ![](https://github.com/anelguel/designing-data-intensive-apps/blob/main/images/bookcover/bookcover.jpg)
 
 [Preface](/Preface.md)

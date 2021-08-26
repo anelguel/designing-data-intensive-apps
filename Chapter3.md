@@ -21,21 +21,26 @@ Basically, a hash index is an array of N buckets or slots, each one containing a
 A hash function is any algorithm that maps data of variable length to data of a fixed length in a deterministic and close to random way. A very simple hash function would be a string that returns its length, so F("John") = 4 and F("Ed") = 2. If we define a hash index of 5 buckets using this function then the pointers that point to "John" and "Ed" are stored at buckets 4 and 2 respectively. The following image will help you understand.
 
 ![](images\chapter3\hashindexandfunc.jpg)
+![](https://github.com/anelguel/designing-data-intensive-apps/blob/main/images/chapter3/hashindexandfunc.jpg)
+
 
 At this point everything seems clear, but what happens when we apply this simple hash function on "Bill"? The length of string "Bill" is 4, so F("Bill") = 4 which is the same as F("John") = 4. Don't get confused, the fact that two keys have the same Hash value doesn't mean the keys are the same. This is called a "collision" and is very common in hash functions. Of course the more collisions a function has the worse a function is because a large number of hash collisions can have a performance impact on read operations. Also collisions may be caused when the number of buckets is too small compared with the number of distinct keys.
 
 Back to the text, which describes hash index similarily, as seen in the following picture:
 
 ![](images\chapter3\pg72.jpg)
+![](https://github.com/anelguel/designing-data-intensive-apps/blob/main/images/chapter3/pg72.jpg)
 *Here the hash function F(K,N) would be F("123456", 0) and F(42, 64), respectively. These key-value pairs are similar to a dictionary in most programming languages.*
 
 *Compaction* means throwing away duplicate keys in the log, and keeping only the most recent update for each key: 
 ![](images\chapter3\pg73.jpg)
+![](https://github.com/anelguel/designing-data-intensive-apps/blob/main/images/chapter3/pg73.jpg)
 *Only the most recent value is retained, and addresses the optimizing disk space.*
 
 Lastly, because compaction makes segments much smaller, you can also merge several segments together. Segments are never modified after they've been written, so the merged segment is written to a new file. The merging and compaction of frozen segments can be done in a background thread, and while it is going on, we can still continue to serve read and write requests as normal, using the old segment files. After the merging process is complete, we switch read requests to using the new merged segment instead of the old segments - and then the old segment files can simply be deleted as seen below:
 
 ![](images\chapter3\pg74.jpg)
+![](https://github.com/anelguel/designing-data-intensive-apps/blob/main/images/chapter3/pg74.jpg)
 
 This approach is good, but comes with its limitations, including: file format, deleting records, crash recovery, partially written records, and concurrency control.
 
@@ -44,7 +49,7 @@ This approach is good, but comes with its limitations, including: file format, d
 An SSTable is shown below
 
 ![](images\chapter3\pg76.jpg)
-
+![](https://github.com/anelguel/designing-data-intensive-apps/blob/main/images/chapter3/pg76.jpg)
 Sorted Strings Table (SSTable) is a persistent file format used by Scylla, Apache Cassandra, and other NoSQL databases to take the in-memory data stored in memtables, order it for fast access, and store it on disk in a persistent, ordered, immutable set of files. Immutable means SSTables are never modified. They are later merged into new SSTables or deleted as data is updated. (from https://www.scylladb.com/glossary/sstable/)
 
 LSM Tree A log-structured merge-tree (or LSM tree) is a data structure with performance characteristics that make it attractive for providing indexed access to files with high insert volume, such as transactional log data. LSM trees, like other search trees, maintain key-value pairs. LSM trees maintain data in two or more separate structures, each of which is optimized for its respective underlying storage medium; data is synchronized between the two structures efficiently, in batches. (from Wikipedia)

@@ -72,6 +72,34 @@ It rarely makes sense to use a multi-leader setup within a single datacenter, be
 
 ### Multi-datacenter operation
 
-Imagine you have a datacenter with replicas in several different datacenters (perhaps so thatyou can tolerate failure of an entire datacenter, or perhaps in order to be closer to you users). With a normal leader-based replication setup, the leader has to be in one of the datacenters, and all writes must go through that datacenter.
+Imagine you have a datacenter with replicas in several different datacenters (perhaps so that you can tolerate failure of an entire datacenter, or perhaps in order to be closer to you users). With a normal leader-based replication setup, the leader has to be in one of the datacenters, and all writes must go through that datacenter.
 
 In multi-leader configuration, you can have a leader in *each* datacenter. Within each datacenter, regular leader-follower replication is used; between datacenters, each datacenter's leader replicates its changes to the leaders in other datacenters.
+
+### Clients with offline operation
+
+Multi-leader replication is appropiate if you have an application that needs to continue to work while it is disconnected from the internet.
+
+> Example: Consider the calendar apps on your mobile phone, and other devices. You need to see you meetings (make read requests) and enter new meetings (make write requests) at any time, whether you're connected to the internet or not. If you make changes and you're offline, they need to be synced with a server and your other devices when the device is next online. In each case, every device has a local database that acts as a leader (accepting write requests), and there is an asynchronous multi-leader replication process (sync) between the replicas of your calendar on all your devices. *From an archtectual point of view, this setup is essentially the same as multi-leader replication between datacenters. Each device is a "datacenter"*
+
+### Collaborative Editing
+*Real-time collaborative editing* applications allow several people to edit a document simultaneously like Google Docs. When one user edits a document, the changes are instantly applied to their local replica and asynchronously replicated to the server and any other users that are editing the same document.
+
+If you want to guarantee no editing conflicts, the application must obtain a lock on the document before a user can edit it. If another user want to edit, they must wait for commited changes of the first user. This would be single-leader replication.
+
+For faster replication, you'd want multi-leader replication where various people are working on the document at the same time, but that does pose greater conflicts.
+
+## Handling Write Conflicts 
+The biggest problem with multi-leader replication is that write conflicts can occue, which means that conflict resolution is required.
+
+In the image below, user 1 changes the title of a page from A to B, and user 2 changes the title from A to C at the same time. Each user's change is successfully applied to the local leader. However, when changes are asynchronously replicated, a conflict is detected. This doesn't occur in single-leader databases.
+
+![](images\chapter5\pg171.jpg)
+![](https://github.com/anelguel/designing-data-intensive-apps/blob/main/images/chapter5/pg171.jpg) 
+
+### Synchronous vs. Asynchronous conflict detection
+In a single-leader databse, the second writer will either block and wait for the first write to complete. 
+
+On the other hand, in a multi-leader setup, both writes are successful, and the conflict is only detected asynchronously at a later time (in which it may be too late to ask the user to resolve the conflict).
+
+In principle, you could make the conflict detection *synchronous* - i.e. wait for the write to be replicated to all the replicas before telling the user that the write was successful. But then you lose the main advantgae of multi-leader replication: allowing each replica to accept writes independently. If you want synchronous conflict detection, you might as well use single-leader replication. 

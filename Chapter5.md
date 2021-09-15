@@ -103,3 +103,34 @@ In a single-leader databse, the second writer will either block and wait for the
 On the other hand, in a multi-leader setup, both writes are successful, and the conflict is only detected asynchronously at a later time (in which it may be too late to ask the user to resolve the conflict).
 
 In principle, you could make the conflict detection *synchronous* - i.e. wait for the write to be replicated to all the replicas before telling the user that the write was successful. But then you lose the main advantgae of multi-leader replication: allowing each replica to accept writes independently. If you want synchronous conflict detection, you might as well use single-leader replication. 
+
+### Converging toward a consistent state
+A single leader database applies writes in sequencial order: if there are several updates to the same field, the last write determines the final value of the field.
+
+In a multi-leader configuration, there is no defined ordering of writes, so it's not clear what the final value should be. In the figure above, at Leader 1 the title is updated to B and then C; at Leader 2 it is first updated to C then B. Neither order is "more correct" than the other.
+
+If each replica simply applied writes in the order that it saw the writes, the database would end up in an inconsistent state: the final value would be C at leader 1 and B at leader 2. That is not acceptable - every replication scheme must ensure that the data is eventually the same in all replicas. 
+
+Thus, the database must resolve the conflict in a *convergent* way, which means that all replicas must arrive at the same final value when all changes have been replicated.
+
+There are various ways of achieving convergent conflict resolution:
+
+* Give each write a unique ID (e.g. a timestamp, hash of a key and value, etc.), pick the write with the highest ID as the *winner*, and throw away the other writes. If a timestamp is used, this method is called *last write wins*. Although this approach is popular, it is prone to data loss.
+
+* Give each replica a unique ID, and let writes that originated at a higher numbered replica always take precedence over writes that originated at a lower-numbered replica. This approach also implies data loss.
+
+* Somehow merge the values together - e.g. order them alphabetically and then concatenate them (in Figure 5-7, the merged title might be something like "B/C")
+
+* Record the conflict in an explict data structure that preserves all information, and write application code that resolves the conflict at some later time (perhaps by prompting the user).
+
+### Custom conflic resolution logic
+Most multi-leader replication tools let you write conflict resolution logic using application code, that code may be executed on write or on read.
+
+
+
+
+
+
+
+
+

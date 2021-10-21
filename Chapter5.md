@@ -126,9 +126,17 @@ There are various ways of achieving convergent conflict resolution:
 ### Custom conflic resolution logic
 Most multi-leader replication tools let you write conflict resolution logic using application code, that code may be executed on write or on read.
 
+### Multi-Leader Replication Topologies
+A replication topology describes the communication paths along which writes are propagated from one node to another. With more than two leaders, various different topologies are possible.
 
+![](images\chapter5\pg175.jpg)
+![](https://github.com/anelguel/designing-data-intensive-apps/blob/main/images/chapter5/pg175.jpg) 
 
+The most general is the all-to-all, where every leader sends its writes to every other leader. Circular topologies are where each node receives writes from one node and forwards those writes (plus any writes of its own) to one other node. A star topology is where one designated root node forwards writes to all of the other nodes. The star topology can be generalized to a tress.
 
+In circular and star topologies, a write may need to pass through several nodes before it reaches all replicas. Therefore, nodes need to forward data changes they recieve from other nodes. A problem with circular and star topologies is that if just one node fails, it can interrupt the flow of replication messages between other nodes, causing them to be unable to communication until the node is fixed.
+
+On the other hand, all-to-all topologies can have issues too like some network links may be faster than others (e.g. due to network congestion), with the result that some replication messages may "overtake" others.
 
 
 

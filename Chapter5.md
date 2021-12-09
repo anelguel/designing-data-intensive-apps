@@ -132,11 +132,43 @@ A replication topology describes the communication paths along which writes are 
 ![](images\chapter5\pg175.jpg)
 ![](https://github.com/anelguel/designing-data-intensive-apps/blob/main/images/chapter5/pg175.jpg) 
 
-The most general is the all-to-all, where every leader sends its writes to every other leader. Circular topologies are where each node receives writes from one node and forwards those writes (plus any writes of its own) to one other node. A star topology is where one designated root node forwards writes to all of the other nodes. The star topology can be generalized to a tress.
+The most general is the all-to-all, where every leader sends its writes to every other leader. Circular topologies are where each node receives writes from one node and forwards those writes (plus any writes of its own) to one other node. A star topology is where one designated root node forwards writes to all of the other nodes. The star topology can be generalized to a tree.
 
 In circular and star topologies, a write may need to pass through several nodes before it reaches all replicas. Therefore, nodes need to forward data changes they recieve from other nodes. A problem with circular and star topologies is that if just one node fails, it can interrupt the flow of replication messages between other nodes, causing them to be unable to communication until the node is fixed.
 
-On the other hand, all-to-all topologies can have issues too like some network links may be faster than others (e.g. due to network congestion), with the result that some replication messages may "overtake" others.
+On the other hand, all-to-all topologies can have issues too like some network links may be faster than others (e.g. due to network congestion), with the result that some replication messages may "overtake" others. To order these events correctly, a technique called version vectors can be used.
+
+### Leaderless Replication
+Some data storage systems take a different approach, abandoning the concept of a leader and allowing any replica to directly accept writes from clients.
+
+In some leaderless implementations, the client directly sends its writes to several replicas, while in others, a coordinator node does this on behalf of the client. The coordinator does not enforce a particular ordering of writes.
+
+## Summary
+
+### Replication can serve several purposes:
+
+* High availabilty: Keeping the system running, even when one machine (or several machines, or an entire datacenter) goes down.
+
+* Disconnected operation: Allowing an application to continue working when there is a network interruption
+
+* Latency: Placing data geographically close to users, so that users can interact with it faster
+
+* Scalability: Being able to handle a higher volume of reads that a single machine could handle, by performing reads on replicas.
+
+### There are three main approaches to replication:
+* Single leader replication: Clients send all writes to a single node (the leader), which sends a stream of data change events to the other replicas (followers). Reads can be performed on any replica, but reads from followers might be stale.
+
+* Multi leader replication: Clients send each write to one of several leader nodes, any of which can accept writes. The leaders send streams of data change events to each other and to any follower nodes.
+
+* Leaderless replicaton: Clients send each write to several nodes, and read from several nodes in parallel in order to detect and correct nodes with stale data.
+
+### Deciding how an application should behave under replication lag:
+* Read-after-write consistency: Users should always see data that they submitted themselves.
+
+* Monotonic reads: After users have seen the data at one point in time, they shouldn't later see the data from some earlier point in time
+
+* Consistent perfix reads: Users shoudll see the data in a state that makes causal sense: for example, seeing a question and its reply in the correct order.
+
 
 
 

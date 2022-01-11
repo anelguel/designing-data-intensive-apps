@@ -19,3 +19,4 @@ This is the documentation for Designing Data-Intensive Applications by Martin Kl
 
 [Chapter 5](/Chapter5.md)
 
+[Chapter 6](/Chapter6.md)
